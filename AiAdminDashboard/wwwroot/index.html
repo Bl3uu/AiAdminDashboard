@@ -1,0 +1,67 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Admin Control Panel</title>
+    <link href="style.css" rel="stylesheet" />
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans min-h-screen p-8">
+    <div class="max-w-4xl mx-auto space-y-6">
+        <!-- Header -->
+        <header class="flex justify-between items-center border-b border-slate-800 pb-4">
+            <div>
+                <h1 class="text-2xl font-bold text-cyan-400">AI Telemetry Dashboard</h1>
+                <p class="text-xs text-slate-400">System Monitoring & Memory Inspector</p>
+            </div>
+            <span class="px-3 py-1 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs rounded-full font-medium">
+                ● System Active
+            </span>
+        </header>
+
+        <!-- Status Card -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="bg-slate-900 border border-slate-800 p-5 roundex-xl shadow-lg">
+                <span class="text-xs text-slate-400 block mb-1">Status</span>
+                <span id="sys-status" class="text-lg font-semibold text-white">Loading...</span>
+            </div>
+            <div class="bg-slate-900 border border-slate-800 p-5 roundex-xl shadow-lg">
+                <span class="text-xs text-slate-400 block mb-1">Active Module</span>
+                <span id="sys-module" class="text-lg font-semibold text-cyan-300">Loading...</span>
+            </div>
+            <div class="bg-slate-900 border border-slate-800 p-5 roundex-xl shadow-lg">
+                <span class="text-xs text-slate-400 block mb-1">Memory Usage</span>
+                <span id="sys-memory" class="text-lg font-semibold text-purple-400">Loading...</span>
+            </div>
+        </div>
+
+        <!-- Fetch Button-->
+        <button id="fetch-btn" class="px-4 py-2 bg-cyan-600 hover:bg-cyan-500 text-white font-medium text-sm rounded-lg transition-all shadow-md cursor-pointer">
+            Fetch Fresh Telemetry
+        </button>
+    </div>
+
+    <!-- Frontend Fetch Script-->
+    <script>
+        async function loadTelemetry()
+        {
+            try {
+                const response = await fetch('/api/telemetry/status');
+                const data = await response.json();
+
+                console.log("Backend Data Received:", data);
+
+                document.getElementById('sys-status').innerText = data.status;
+                document.getElementById('sys-module').innerText = data.activeModule;
+                document.getElementById('sys-memory').innerText = `${data.memoryUsageMb} MB`;
+            }
+            catch (err)
+            {
+                console.error("Failed to connect to API:", err);
+            }
+        }
+        document.getElementById('fetch-btn').addEventListener('click', loadTelemetry);
+        loadTelemetry();
+    </script>
+</body>
+</html>
