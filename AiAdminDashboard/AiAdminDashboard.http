@@ -1,0 +1,6 @@
+@AiAdminDashboard_HostAddress = http://localhost:5269
+
+GET {{AiAdminDashboard_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
